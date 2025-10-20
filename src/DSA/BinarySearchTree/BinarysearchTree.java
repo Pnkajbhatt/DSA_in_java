@@ -62,6 +62,42 @@ public class BinarysearchTree {
             preorder(root.left);
             preorder(root.right);
         }
+        void deleteNode(int key) {
+            deleteNodeH(root, key);
+        }
+        Node deleteNodeH(Node root, int key) {
+            if (root == null) return root;
+
+            if (key < root.data) {
+                root.left = deleteNodeH(root.left, key);
+            } else if (key > root.data) {
+                root.right = deleteNodeH(root.right, key);
+            } else {
+                
+                if (root.left == null && root.right == null) {
+                    
+                    return null;
+                }
+                if(root.left == null){
+                    return root.right;
+                }
+                if(root.right == null){
+                    return root.left;
+                }
+                else{
+                    Node Is = findInorderSuccesser(root.left);
+                    root.data = Is.data;
+                    root.right = deleteNodeH(root.right,key);
+                }
+            }
+            return root;
+        }
+        Node findInorderSuccesser(Node root){
+            if(root.left == null){
+                return root;
+            }
+            return findInorderSuccesser(root.left);
+        }
 
         void inorder(Node root) {
             if (root == null) return;
@@ -93,8 +129,9 @@ public class BinarysearchTree {
         System.out.println("Inorder Traversal:");
         tree.inorder(tree.root);
 
-        System.out.println("\nSearch for 30: " + tree.search(tree.root, 30));
-        System.out.println("Search for 90: " + tree.search(tree.root, 90));
+        tree.deleteNode(40);
+        tree.inorder(tree.root);
+
     }
 }
 
